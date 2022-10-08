@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  #servlet:
+  #context-path: /thymeleafApplication
+
+spring:
+  # thymeleaf 模板引擎
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+  # 配置数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # mysql 8 需要使用 cj
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/employee-thymeleaf?serverTimezone=UTC
+    username: root
+    password: 3306
+  servlet:
+    # 设置文件上传大小限制
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 单次请求文件总大小
+      max-request-size: 100MB
+  resources:
+    # file => 暴露的是本地路径下的文件
+    static-locations:
+      # 访问的本地路径
+      - file:${photo.file.dir}
+      - classpath:/static
+      - classpath:/public
+      - classpath:/resources
+      - classpath:/META-INF/resource
+
+# 指定服务器图片上传存储路径
+photo:
+  file:
+    dir: C:\Users\slien\Desktop\Java高级\WithThymeleaf\photos
+
+# mybatis 配置
+mybatis:
+  # 扫描实体类
+  type-aliases-package: com.withThymeleaf.pojo

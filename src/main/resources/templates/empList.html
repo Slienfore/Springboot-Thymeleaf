@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>emplist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div id="wrap">
+    <div id="top_content">
+        <div id="header">
+            <div id="rightheader">
+                <p>
+                    2009/11/20
+                    <br/>
+                    <a th:href="@{/user/logout}">安全退出</a>
+                </p>
+            </div>
+            <div id="topheader">
+                <h1 id="title">
+                    <a href="#">main</a>
+                </h1>
+            </div>
+            <div id="navigation">
+            </div>
+        </div>
+        <div id="content">
+            <p id="whereami">
+            </p>
+            <h1>
+                <!--获取真实名字(不为空时候才会进行显示)-->
+                欢迎 <span th:if="${session.user != null}" th:text="${session.user.realname()}"></span>
+            </h1>
+            <table class="table">
+                <tr class="table_header">
+                    <td>
+                        编号
+                    </td>
+                    <td>
+                        姓名
+                    </td>
+                    <td>
+                        头像
+                    </td>
+                    <td>
+                        工资
+                    </td>
+                    <td>
+                        生日
+                    </td>
+                    <td>
+                        操作
+                    </td>
+                </tr>
+                <!--遍历-->
+                <tr th:each="employee, status : ${employeeList}" th:class="${status.odd ? 'row1' : 'row2'}">
+                    <td>
+                        <span th:text="${employee.id()}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${employee.name()}"></span>
+                    </td>
+                    <td>
+                        <img th:src="@{'/' + ${employee.photo()}}" width="60">
+                    </td>
+                    <td>
+                        <span th:text="${employee.salary()}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${#dates.format(employee.birthday(), 'yyy/MM/dd')}"></span>
+                    </td>
+                    <td>
+                        <!--根据员工 ID 进行删除员工信息-->
+                        <a href="javascript:;" th:onclick="'deleteEmployee('+ ${employee.id()} +')'">删除</a>&nbsp;
+                        <!--传递当前员工 Id-->
+                        <a th:href="@{/employee/detail(id = ${employee.id()})}">更新</a>
+                    </td>
+                </tr>
+                <script>
+                    function deleteEmployee(id) {
+                        if (window.confirm('确定要删除这条记录吗?')) {
+                            location.href = '[[@{/employee/delete?id=}]]' + id
+                        }
+                    }
+                </script>
+            </table>
+            <p>
+                <input type="button" class="button" value="添加" onclick="addEmp()"/>
+                <script>
+                    function addEmp() {
+                        location.href = '[[@{/addEmp}]]'
+                    }
+                </script>
+            </p>
+        </div>
+    </div>
+    <div id="footer">
+        <div id="footer_bg">
+            ABC@126.com
+        </div>
+    </div>
+</div>
+</body>
+</html>
